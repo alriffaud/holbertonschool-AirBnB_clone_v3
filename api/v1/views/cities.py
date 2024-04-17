@@ -56,8 +56,8 @@ def get_city_by_id(city_id):
     return jsonify(city.to_dict())
 
 
-@app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
-def update_state_by_id(state_id):
+@app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
+def update_state_by_id(city_id):
     """
     Updates a specific City object by ID
     """
