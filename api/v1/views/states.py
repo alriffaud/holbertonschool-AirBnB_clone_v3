@@ -17,7 +17,7 @@ def get_all_states():
     state = []
     for obj in storage.all(State).values():
         state.append(obj.to_dict())
-    return jsonify(state)
+    return jsonify(state), 200
 
 
 @app_views.route("/states", methods=["POST"], strict_slashes=False)
@@ -26,10 +26,10 @@ def create_state():
     Create state route
     """
     state_info = request.get_json()
-    if state_info is None:
-        abort(400, 'Not a JSON')
+    if not state_info:
+        abort(400, {"Not a JSON"})
     if "name" not in state_info:
-        abort(400, 'Missing name')
+        abort(400, {"Missing name"})
 
     new_state_obj = State(**state_info)
     storage.new(new_state_obj)
