@@ -11,13 +11,13 @@ from models.state import State
 from models.user import User
 
 
-@app_views.route("/status", methods=["GET"])
+@app_views.route("/status", methods=["GET"], strict_slashes=False)
 def status():
     """Returns a JSON string"""
     return jsonify({"status": "OK"})
 
 
-@app_views.route("/stats", methods=["GET"])
+@app_views.route("/stats", methods=["GET"], strict_slashes=False)
 def stats_class_count():
     """Retrieves the number of each object by type"""
     classes = [Amenity, City, Place, Review, State, User]
