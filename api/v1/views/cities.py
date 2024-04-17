@@ -16,13 +16,13 @@ def get_all_cities(state_id):
     """
     Retrieves all City objects of a State
     """
-    states = storage.get(State, state_id)
-    if not states:
+    state = storage.get(State, state_id)
+    if not state:
         abort(404)
-    dict = []
-    for obj in states.cities:
-        dict.append(obj.to_dict())
-    return jsonify(dict)
+    city_list = []
+    for city in state.cities:
+        city_list.append(city.to_dict())
+    return jsonify(city_list)
 
 
 @app_views.route('/states/<state_id>/cities',
@@ -31,18 +31,20 @@ def create_city(state_id):
     """
     Create city route
     """
-    state_info = storage.get(State, state_id)
-    if state_info is None:
+    state = storage.get(State, state_id)
+    if not state:
+        abort(404)
+    city_data = request.get_json()
+    if city_data is None:
         abort(400, 'Not a JSON')
-    if "name" not in request.get_json():
+    if "name" not in city_data:
         abort(400, 'Missing name')
 
-    dict = request.get_json()
-    new_city_obj = City(**dict)
-    new_city_obj.state_id = state_info.id
-    storage.new(new_city_obj)
-    new_city_obj.save()
-    return jsonify(new_city_obj.to_dict()), 201
+    new_city = City(**city_data)
+    new_city.state_id = state.id
+    storage.new(new_city)
+    new_city.save()
+    return jsonify(new_city.to_dict()), 201
 
 
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
@@ -57,34 +59,31 @@ def get_city_by_id(city_id):
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
-def update_state_by_id(city_id):
+def update_city_by_id(city_id):
     """
     Updates a specific City object by ID
     """
-    city_info = storage.get(City, city_id)
-    if not city_info:
+    city = storage.get(City, city_id)
+    if not city:
         abort(404)
-    if not request.get_json():
+    city_data = request.get_json()
+    if city_data is None:
         abort(400, "Not a JSON")
-    data = request.get_json()
-    for key, value in data.items():
-        if key != "id":
-            if key != "created_at":
-                if key != "updated_at":
-                    setattr(city_info, key, value)
-                    storage.save()
-    return jsonify(city_info.to_dict()), 200
+    for key, value in city_data.items():
+        if key not in ["id", "created_at", "updated_at"]:
+            setattr(city, key, value)
+    storage.save()
+    return jsonify(city.to_dict()), 200
 
 
-@app_views.route('/cities/<city_id>', methods=['DELETE'],
-                 strict_slashes=False)
-def delete_state_by_id(city_id):
+@app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
+def delete_city_by_id(city_id):
     """
     Deletes City by ID
     """
     city = storage.get(City, city_id)
-    if city:
-        storage.delete(city)
-        storage.save()
-        return jsonify({}), 200
-    abort(404)
+    if not city:
+        abort(404)
+    storage.delete(city)
+    storage.save()
+    return jsonify({}), 200
