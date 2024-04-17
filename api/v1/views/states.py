@@ -42,10 +42,11 @@ def get_state_by_id(state_id):
     """
     Retrieves a specific State object by ID
     """
-    for instance in storage.all(State).values():
-        if instance.id == state_id:
-            return jsonify(instance.to_json())
-    abort(404)
+    d = storage.get("State", state_id)
+    if d:
+        return jsonify(d.to_dict()), 200
+    else:
+        abort(404)
 
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
@@ -53,7 +54,7 @@ def update_state_by_id(state_id):
     """
     Updates a specific State object by ID
     """
-    state_info = storage.get(State, state_id)
+    state_info = storage.get("State", state_id)
     if not state_info:
         abort(404)
     if not request.get_json():

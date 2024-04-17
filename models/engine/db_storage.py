@@ -77,7 +77,9 @@ class DBStorage:
 
     def get(self, cls, id):
         """Retrieve an object by class name and id."""
-        return (self.__session.query(cls).filter_by(id=id).first())
+        key = cls + "." + id
+        if key in self.all():
+            return self.all()[key]
 
     def count(self, cls=None):
         """Count the number of objects stored that match the given class."""
