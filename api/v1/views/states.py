@@ -15,8 +15,8 @@ def get_all_states():
     """
     state = []
     states = storage_instance.all("State")
-    for entity in state.values():
-        states.append(entity.to_json())
+    for instance in state.values():
+        states.append(instance.to_json())
 
     return jsonify(states)
 
@@ -41,7 +41,7 @@ def create_state():
 
 
 @app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
-def state_by_id(state_id):
+def get_state_by_id(state_id):
     """
     Retrieves a specific State object by ID
     """
