@@ -2,9 +2,11 @@
 """
 Routes for handling State objects and operations
 """
+
 from flask import jsonify, abort, request
 from api.v1.views import app_views, storage_instance
 from models.state import State
+
 
 @app_views.route("/states", methods=["GET"], strict_slashes=False)
 def get_all_states():
@@ -17,6 +19,7 @@ def get_all_states():
         states.append(entity.to_json())
 
     return jsonify(states)
+
 
 @app_views.route("/states", methods=["POST"], strict_slashes=False)
 def create_state():
@@ -36,6 +39,7 @@ def create_state():
 
     return response_obj
 
+
 @app_views.route("/states/<state_id>", methods=["GET"], strict_slashes=False)
 def state_by_id(state_id):
     """
@@ -48,6 +52,7 @@ def state_by_id(state_id):
         abort(404)
 
     return jsonify(obj.to_json())
+
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
 def update_state_by_id(state_id):
@@ -65,6 +70,7 @@ def update_state_by_id(state_id):
             setattr(obj, key, val)
     obj.save()
     return jsonify(obj.to_json())
+
 
 @app_views.route("/states/<state_id>", methods=["DELETE"],
                  strict_slashes=False)
