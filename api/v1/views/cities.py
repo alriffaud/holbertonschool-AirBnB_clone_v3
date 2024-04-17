@@ -16,7 +16,7 @@ def get_all_cities(state_id):
     """
     Retrieves all City objects of a State
     """
-    state = storage.get(State, state_id)
+    state = storage.get("State", state_id)
     if not state:
         abort(404)
     city_list = []
@@ -31,7 +31,7 @@ def create_city(state_id):
     """
     Create city route
     """
-    state = storage.get(State, state_id)
+    state = storage.get("State", state_id)
     if not state:
         abort(404)
     city_data = request.get_json()
@@ -52,7 +52,7 @@ def get_city_by_id(city_id):
     """
     Retrieves a specific City object by ID
     """
-    city = storage.get(City, city_id)
+    city = storage.get("City", city_id)
     if not city:
         abort(404)
     return jsonify(city.to_dict())
@@ -63,7 +63,7 @@ def update_city_by_id(city_id):
     """
     Updates a specific City object by ID
     """
-    city = storage.get(City, city_id)
+    city = storage.get("City", city_id)
     if not city:
         abort(404)
     city_data = request.get_json()
@@ -81,7 +81,7 @@ def delete_city_by_id(city_id):
     """
     Deletes City by ID
     """
-    city = storage.get(City, city_id)
+    city = storage.get("City", city_id)
     if not city:
         abort(404)
     storage.delete(city)
