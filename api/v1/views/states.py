@@ -4,7 +4,8 @@ Routes for handling State objects and operations
 """
 
 from flask import jsonify, abort, request
-from api.v1.views import app_views, storage_instance
+from api.v1.views import app_views
+from models import storage
 from models.state import State
 
 
@@ -14,7 +15,7 @@ def get_all_states():
     Retrieves all State objects
     """
     state = []
-    states = storage_instance.all("State")
+    states = storage.all("State")
     for instance in state.values():
         states.append(instance.to_json())
 
@@ -46,7 +47,7 @@ def get_state_by_id(state_id):
     Retrieves a specific State object by ID
     """
 
-    obj = storage_instance.get("State", str(state_id))
+    obj = storage.get("State", str(state_id))
 
     if obj is None:
         abort(404)
@@ -62,7 +63,7 @@ def update_state_by_id(state_id):
     state_info = request.get_json(silent=True)
     if state_info is None:
         abort(400, 'Not a JSON')
-    obj = storage_instance.get("State", str(state_id))
+    obj = storage.get("State", str(state_id))
     if obj is None:
         abort(404)
     for key, val in state_info.items():
@@ -79,12 +80,12 @@ def delete_state_by_id(state_id):
     Deletes State by ID
     """
 
-    obj = storage_instance.get("State", str(state_id))
+    obj = storage.get("State", str(state_id))
 
     if obj is None:
         abort(404)
 
-    storage_instance.delete(obj)
-    storage_instance.save()
+    storage.delete(obj)
+    storage.save()
 
     return jsonify({})
