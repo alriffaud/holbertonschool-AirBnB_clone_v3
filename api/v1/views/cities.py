@@ -16,7 +16,7 @@ def get_all_cities(state_id):
     """
     Retrieves all City objects of a State
     """
-    state = storage.get("State", state_id)
+    state = storage.get(State, state_id)
     if not state:
         abort(404)
     city_list = []
@@ -31,7 +31,7 @@ def create_city(state_id):
     """
     Create city route
     """
-    state = storage.get("State", state_id)
+    state = storage.get(State, state_id)
     if not state:
         abort(404)
     city_data = request.get_json()
