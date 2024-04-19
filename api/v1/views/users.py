@@ -36,10 +36,12 @@ def create_user():
     Create user route
     """
     user_data = request.get_json()
-    if user_data is None:
-        abort(400, 'Not a JSON')
-    if "email" not in user_data or "password" not in user_data:
-        abort(400, 'Missing email or password')
+    if not user_data:
+        abort(400, "Not a JSON")
+    if 'password' not in user_data:
+        abort(400, "Missing password")
+    if 'email' not in user_data:
+        abort(400, "Missing email")
 
     new_user = User(**user_data)
     storage.new(new_user)
