@@ -86,8 +86,8 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
         """Test that save properly saves objects to file.json"""
-        
-    @unittest.skipIf(models.storage_t != 'db')
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_get(self):
         user = User(id="1234", name="Test User")
         self.storage.new(user)
@@ -96,12 +96,11 @@ class TestFileStorage(unittest.TestCase):
         self.assertIsNotNone(retrieved_user)
         self.assertEqual(retrieved_user.id, "1234")
         self.assertEqual(retrieved_user.name, "Test User")
-        
-    @unittest.skipIf(models.storage_t != 'db')
+
+    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         self.assertGreaterEqual(self.storage.count(), 0)
         user = User(id="1234", name="Test User")
         self.storage.new(user)
         self.storage.save()
         self.assertEqual(self.storage.count(User), 1)
-
